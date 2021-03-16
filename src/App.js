@@ -1,11 +1,16 @@
+import About from "./components/About/index.js"
+import Nav from "./components/Nav/index.js";
 
 
 function App() {
+
   return (
     <div className="App">
-      <header className="App-header">
-      <h1>Stuff</h1>
-      </header>
+      <Nav/>
+      <main>
+
+     <About/>
+      </main>
     </div>
   );
 }
