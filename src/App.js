@@ -26,9 +26,9 @@ function App() {
       ></Nav>
       <main>
         <div>
+          <ContactForm/>
           <Gallery category={currentCategory}></Gallery>
           <About></About>
-          <ContactForm/>
         </div>
       </main>
     </div>
