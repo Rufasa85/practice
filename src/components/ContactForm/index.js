@@ -1,4 +1,5 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
+import {validateEmail} from "../../utils/helpers"
 
 export default function ContactForm() {
     const [formState, setFormState] = useState({
@@ -6,8 +7,15 @@ export default function ContactForm() {
         email:"",
         message:""
     })
+    const [errMessages,setErrMessages] = useState([])
+
+    useEffect(()=>{
+        console.log('err message effect');
+        console.log(errMessages)
+    },[errMessages])
     const handleChange = e=>{
         const {name,value} = e.target;
+       
         setFormState({
             ...formState,
             [name]:value
@@ -15,12 +23,35 @@ export default function ContactForm() {
     }
     const handleSubmit = e=>{
         e.preventDefault();
-        console.log('form submitted!')
-        setFormState({
-            name:"",
-            email:"",
-            message:""
-        })
+       const myErr = [];
+        if(formState.name.length<1){
+            myErr.push("name is required")
+            
+        } 
+        if(formState.email.length<1) {
+            myErr.push("email is required")
+        }
+        if(formState.message.length<1) {
+            myErr.push("message is required")
+        }
+        if(!validateEmail(formState.email)){
+            myErr.push("email format invalid")
+        }
+        if(myErr.length<1){
+            console.log('form submitted!')
+            setFormState({
+                name:"",
+                email:"",
+                message:""
+           
+            })
+        }
+        else {
+            myErr.forEach(msg=>{
+                console.log(msg);
+            })
+            setErrMessages(myErr);
+        }
     }
     return (
         <section>
@@ -38,7 +69,8 @@ export default function ContactForm() {
                     <label htmlFor="message">Message:</label>
                     <textarea name="message" onChange={handleChange} value = {formState.message} rows="5" />
                 </div>
-                <button type="submit">Submit</button>
+                {errMessages.length? errMessages.map(msg=><p className="error-text">{msg}</p>):null}
+                <button data-testid="submitBtn" type="submit">Submit</button>
             </form>
         </section>
     )
