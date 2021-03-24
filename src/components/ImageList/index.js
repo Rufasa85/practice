@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import Modal from '../Modal';
 
 
 export default function ImageList({category}) {
@@ -99,11 +100,16 @@ export default function ImageList({category}) {
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultricie',
         },
       ]);
-    return (
+    const [selectedPhoto,setSelectedPhoto] = useState(false);
+      const closeModal = ()=>{
+        setSelectedPhoto(false)
+      }
+      return (
         <div className="flex-row">
             {photos.filter(pic=>pic.category===category).map((pic,i)=>{
-                return <img key = {pic.name}  alt={pic.name} className="img-thumbnail mx-1" src={require(`../../assets/small/${category}/${i}.jpg`).default}/>
+                return <img key = {pic.name} onClick={()=>setSelectedPhoto({category:category,name:pic.name,src:require(`../../assets/large/${category}/${i}.jpg`).default,desc:pic.description})} alt={pic.name} className="img-thumbnail mx-1" src={require(`../../assets/small/${category}/${i}.jpg`).default}/>
             })}
+            {selectedPhoto?<Modal close={closeModal} photo={selectedPhoto}/>:null}
         </div>
     )
 }
